@@ -7,6 +7,8 @@
 //============================================================================
 
 #include <iostream>
+#include <vector>
+#include "Statistics.h"
 using namespace std;
 
 int main() {
@@ -24,3 +26,5 @@ int main() {
 	// gracias totales
 	return 0;
 }
+
+
