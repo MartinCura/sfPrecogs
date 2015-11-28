@@ -12,6 +12,7 @@
 #include <vector>
 #include <math.h>
 #include "Crimen.h"
+#include "TestRow.h"
 using namespace std;
 
 class ClasificadorBayesiano {
