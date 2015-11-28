@@ -39,18 +39,7 @@ int main() {
 	cout << "MAAIAAAMEEEEE" << endl;
 
 	// lectura de train
-		float mean = 5.855;
-		vector<float> x;
-		x.push_back(6);
-		x.push_back(5.92);
-		x.push_back(5.58);
-		x.push_back(5.92);
-		float variance = 0;
-		for (int i = 0; i < 4; ++i) {
-	        variance += (x[i] - mean) * 2;
-	    }
 
-	    cout << variance;
 	// Training
 
 	// lectura de test
