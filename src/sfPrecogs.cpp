@@ -10,41 +10,34 @@
 #include <vector>
 #include <iostream>
 #include <vector>
+#include "ClasificadorBayesiano.h"
+#include "ParserCSV.h"
+#include "TestRow.h"
 #include <sstream>
 #include <fstream>
 #include <string>
 
 using namespace std;
 
-std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str){
-    std::vector<std::string> result;
-    std::string line;
-    std::getline(str,line);
-    std::stringstream lineStream(line);
-    std::string cell;
-
-    while(std::getline(lineStream,cell,','))
-    {
-        result.push_back(cell);
-    }
-    return result;
-}
-
 int main() {
-	// Saludos
 	cout << "MAAIAAAMEEEEE" << endl;
 
-	// lectura de train
+	string train = "train1611.csv";
+	string test = "test1911.csv";
+	string sub = "submission.csv";
+	int CANT_ROW_TEST = 884262;
 
-	// Training
+	ParserCSV* parser = new ParserCSV(train, test, sub);
 
-	// lectura de test
-	// Predictions
+	vector<Crimen*>* v_crimenes = parser->parseTrain();
 
-	// Escritura
+	ClasificadorBayesiano* clasificador = new ClasificadorBayesiano(v_crimenes);
 
-	// gracias totales
+	for (int i = 0; i < CANT_ROW_TEST; i++){
+		TestRow* row_test = parser->getNextTestRow();
+		vector<double>* probas = clasificador->predictProba(row_test);
+		parser->writeRowSubmission(probas);
+	}
+
 	return 0;
 }
-
-
