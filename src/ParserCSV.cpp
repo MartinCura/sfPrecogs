@@ -137,6 +137,12 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
     Crimen* categoria;
     int i = 0;
     while(getline(streamLine, featureString, ',')) {
+        // Remuevo comillas del featureString.
+        char charsToRemove[] = "\"";
+        for ( unsigned int i = 0; i < strlen(charsToRemove); ++i ) {
+            featureString.erase( remove(featureString.begin(), featureString.end(), charsToRemove[i]), featureString.end() );
+        }
+
         switch (i) {
             case CATEGORY_TRAIN: {   // La Category es la primera columna del CSV. Por lo tanto, todas las features siguientes seran validas.
                     int categoryIndex = parseCategory(featureString);
@@ -285,14 +291,14 @@ int ParserCSV::parseDistrict(string district) {
 }
 
 int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
-    vector<string>::iterator it;
     int featureIndex;
     int i = 0;
-    for ( it = featureVector.begin(); it < featureVector.end(); it++, i++ ) {
+    for (vector<string>::const_iterator it = featureVector.begin() ; it != featureVector.end(); ++it){
         if ( it->compare(feature) == 0 ) {
             featureIndex = i;
             break;
         }
+        i++;
     }
 
     return featureIndex;

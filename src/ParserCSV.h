@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <cstring>
 #include "Enum.h"
 #include "TestRow.h"
 #include "Crimen.h"
