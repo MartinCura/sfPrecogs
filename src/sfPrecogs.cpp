@@ -17,9 +17,7 @@
 
 using namespace std;
 
-/*Para leer el csv, no esta funcionando:
- 	std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str)
-{
+std::vector<std::string> getNextLineAndSplitIntoTokens(std::istream& str){
     std::vector<std::string> result;
     std::string line;
     std::getline(str,line);
@@ -32,7 +30,6 @@ using namespace std;
     }
     return result;
 }
-*/
 
 int main() {
 	// Saludos

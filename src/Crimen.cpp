@@ -14,9 +14,10 @@ Crimen::Crimen() {
 	f_mes = new Feature();
 	f_hora = new Feature();
 	f_cuad = new Feature();
+	proba_crimen = 0;
 }
 
-float Crimen::getMedia(TipoFeature tipo){
+double Crimen::getMedia(TipoFeature tipo){
 	switch (tipo){
 	case DISTRICT: return f_district->getMedia();
 	case DAYWEEK: return f_dayWeek->getMedia();
@@ -28,7 +29,7 @@ float Crimen::getMedia(TipoFeature tipo){
 	}
 }
 
-float Crimen::getVarianza(TipoFeature tipo){
+double Crimen::getVarianza(TipoFeature tipo){
 	switch (tipo){
 	case DISTRICT: return f_district->getVarianza();
 	case DAYWEEK: return f_dayWeek->getVarianza();
@@ -38,6 +39,10 @@ float Crimen::getVarianza(TipoFeature tipo){
 	case CUAD: return f_cuad->getVarianza();
 	default: break;
 	}
+}
+
+double Crimen::getProbaCrimen(){
+	return proba_crimen;
 }
 
 Crimen::~Crimen() {
