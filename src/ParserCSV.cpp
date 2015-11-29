@@ -19,7 +19,7 @@ ParserCSV::ParserCSV(string trainPath, string testPath, string submissionPath) {
 
 vector<Crimen*>* ParserCSV::parseTrain() {
     vector<Crimen*>* crimenes = preprocessCrimes();
-    completeCrimesAttributes(crimenes);
+    completeCrimesAttributes(crimenes); // ESTO HACE QUE SE SUMEN 2 VECES
     return crimenes;
 }
 
@@ -311,6 +311,7 @@ void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
         feature->sumatoria += currentValue;
     } else if ( this->trainWasPreprocessed )
         feature->varianza += ( 1 / (double) feature->cantidad ) * ( currentValue - feature->getMedia() );
+		//fprintf(stderr, "VARIANZA = %d !!\n", feature->varianza);
 }
 
 TestRow* ParserCSV::parseLineToTestRow(string line) {

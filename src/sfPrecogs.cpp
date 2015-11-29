@@ -25,11 +25,21 @@ int main() {
 	string train = "train1611.csv";
 	string test = "test1911.csv";
 	string sub = "submission.csv";
-	int CANT_ROW_TEST = 884262;
+	int CANT_ROW_TEST = 2; //884262;
 
 	ParserCSV* parser = new ParserCSV(train, test, sub);
 
 	vector<Crimen*>* v_crimenes = parser->parseTrain();
+
+	///////////////////////////////////////////////////////////////
+	//PARA PROBAR EL CONTADOR DE CRIMENES:
+	int xx = 0;
+    for ( vector<Crimen*>::iterator it = v_crimenes->begin(); it != v_crimenes->end(); ++it ) {
+        Crimen* crimen = *it;
+    	fprintf(stderr, "EL CRIMEN %d aparece: %d veces!\n", xx, crimen->apariciones);
+    	xx++;
+    }
+    /////////////////////////////////////////////////////////////
 
 	ClasificadorBayesiano* clasificador = new ClasificadorBayesiano(v_crimenes);
 
