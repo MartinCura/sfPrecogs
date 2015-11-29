@@ -149,11 +149,12 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
                     Crimen* crimen = crimenes->at(categoryIndex);
                     if ( ! crimen ) {
                         categoria = new Crimen();
+                        crimenes->at(categoryIndex) = categoria;
                     } else {
-                        crimen->apariciones++;
                         categoria = crimen;
+                        if ( ! this->trainWasPreprocessed )
+                            crimen->apariciones++;
                     }
-                    crimenes->at(categoryIndex) = categoria;
                 }
                 break;
             case DISTRICT_TRAIN: {
@@ -195,91 +196,6 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
 
 int ParserCSV::parseCategory(string category) {
     return parseFeature(category, categoriasCrimen);
-
-
-    /*
-    int categoryIndex;
-    if ( ! category.compare("ARSON") )
-        categoryIndex = ARSON;
-    else if ( ! category.compare("ASSAULT") )
-        categoryIndex = ASSAULT;
-    else if ( ! category.compare("BAD CHECKS") )
-        categoryIndex = BAD_CHECKS;
-    else if ( ! category.compare("BRIBERY") )
-        categoryIndex = BRIBERY;
-    else if ( ! category.compare("BURGLARY") )
-        categoryIndex = BURGLARY;
-    else if ( ! category.compare("DISORDERLY CONDUCT") )
-        categoryIndex = DISORDERLY_CONDUCT;
-    else if ( ! category.compare("DRIVING UNDER THE INFLUENCE") )
-        categoryIndex = DRIVING_UNDER_INFLUENCE;
-    else if ( ! category.compare("DRUG/NARCOTIC") )
-        categoryIndex = DRUG_NARCOTIC;
-    else if ( ! category.compare("DRUNKENNESS") )
-        categoryIndex = DRUNKENNESS;
-    else if ( ! category.compare("EMBEZZLEMENT") )
-        categoryIndex = EMBEZZLEMENT;
-    else if ( ! category.compare("EXTORTION") )
-        categoryIndex = EXTORTION;
-    else if ( ! category.compare("FAMILY OFFENSES") )
-        categoryIndex = FAMILY_OFFENSES;
-    else if ( ! category.compare("FORGERY/COUNTERFEITING") )
-        categoryIndex = FORGERY_COUNTERFEITING;
-    else if ( ! category.compare("FRAUD") )
-        categoryIndex = FRAUD;
-    else if ( ! category.compare("GAMBLING") )
-        categoryIndex = GAMBLING;
-    else if ( ! category.compare("KIDNAPPING") )
-        categoryIndex = KIDNAPPING;
-    else if ( ! category.compare("LARCENY/THEFT") )
-        categoryIndex = LARCENY_THEFT;
-    else if ( ! category.compare("LIQUOR LAWS") )
-        categoryIndex = LIQUOR_LAWS;
-    else if ( ! category.compare("LOITERING") )
-        categoryIndex = LOITERING;
-    else if ( ! category.compare("MISSING PERSON") )
-        categoryIndex = MISSING_PERSON;
-    else if ( ! category.compare("NON-CRIMINAL") )
-        categoryIndex = NON_CRIMINAL;
-    else if ( ! category.compare("OTHER OFFENSES") )
-        categoryIndex = OTHER_OFFENSES;
-    else if ( ! category.compare("PORNOGRAPHY/OBSCENE MAT") )
-        categoryIndex = PORNOGRAPHY;
-    else if ( ! category.compare("PROSTITUTION") )
-        categoryIndex = PROSTITUTION;
-    else if ( ! category.compare("RECOVERED VEHICLE") )
-        categoryIndex = RECOVERED_VEHICLE;
-    else if ( ! category.compare("ROBBERY") )
-        categoryIndex = ROBBERY;
-    else if ( ! category.compare("RUNAWAY") )
-        categoryIndex = RUNAWAY;
-    else if ( ! category.compare("SECONDARY CODES") )
-        categoryIndex = SECONDARY_CODES;
-    else if ( ! category.compare("SEX OFFENSES FORCIBLE") )
-        categoryIndex = SEX_OFFENSES_FORCIBLE;
-    else if ( ! category.compare("SEX OFFENSES NON FORCIBLE") )
-        categoryIndex = SEX_OFFENSES_NON_FORCIBLE;
-    else if ( ! category.compare("STOLEN PROPERTY") )
-        categoryIndex = STOLEN_PROPERTY;
-    else if ( ! category.compare("SUICIDE") )
-        categoryIndex = SUICIDE;
-    else if ( ! category.compare("SUSPICIOUS OCC") )
-        categoryIndex = SUSPICIOUS_OCC;
-    else if ( ! category.compare("TREA") )
-        categoryIndex = TREA;
-    else if ( ! category.compare("TRESPASS") )
-        categoryIndex = TRESPASS;
-    else if ( ! category.compare("VANDALISM") )
-        categoryIndex = VANDALISM;
-    else if ( ! category.compare("VEHICLE THEFT") )
-        categoryIndex = VEHICLE_THEFT;
-    else if ( ! category.compare("WARRANTS") )
-        categoryIndex = WARRANTS;
-    else if ( ! category.compare("WEAPON LAWS") )
-        categoryIndex = WEAPON_LAWS;
-
-    return categoryIndex;
-    */
 }
 
 int ParserCSV::parseDayOfWeek(string dayOfWeek) {
@@ -309,9 +225,9 @@ void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
     if ( ! this->trainWasPreprocessed ) {
         feature->cantidad++;
         feature->sumatoria += currentValue;
-    } else if ( this->trainWasPreprocessed )
+    } else {
         feature->varianza += ( 1 / (double) feature->cantidad ) * ( currentValue - feature->getMedia() );
-		//fprintf(stderr, "VARIANZA = %d !!\n", feature->varianza);
+    }
 }
 
 TestRow* ParserCSV::parseLineToTestRow(string line) {
