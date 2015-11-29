@@ -36,12 +36,13 @@ class ParserCSV {
 
         ofstream submission;
         bool submissionHasHeader = false;
+        long countSubmissionRows = 0;
 
         bool trainWasPreprocessed = false;
 
         vector<Crimen*>* preprocessCrimes(ifstream train);
-        void completeCrimesAttributes(ifstream train, vector<Crimen*> &crimenes);
-        void tokenizeLineToCrime(string line, vector<Crimen*> &crimenes);
+        void completeCrimesAttributes(ifstream train, vector<Crimen*>* crimenes);
+        void tokenizeLineToCrime(string line, vector<Crimen*>* crimenes);
         int parseCategory(string category);
         int parseDayOfWeek(string dayOfWeek);
         int parseDistrict(string district);

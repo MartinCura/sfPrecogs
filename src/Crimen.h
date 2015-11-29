@@ -13,16 +13,17 @@
 
 class Crimen {
 private:
-	//TipoCrimen tipo;
-	Feature* f_district;
+
+public:
+    Feature* f_district;
 	Feature* f_dayWeek;
 	Feature* f_anio;
 	Feature* f_mes;
 	Feature* f_hora;
 	Feature* f_cuad;
-	double proba_crimen;
+	long apariciones = 1;   // Cantidad de veces presente en el train dataset.
+    double proba_crimen;
 
-public:
 	double getMedia(TipoFeature tipo);
 	double getVarianza(TipoFeature tipo);
 	double getProbaCrimen();

@@ -1,6 +1,10 @@
 #include "ParserCSV.h"
 
 const int CANT_CATEGORIAS = 39;
+const vector<string> categoriasCrimen(CANT_CATEGORIAS) { "ARSON", "ASSAULT", "BAD CHECKS", "BRIBERY", "BURGLARY", "DISORDERLY CONDUCT", "DRIVING UNDER THE INFLUENCE", "DRUG/NARCOTIC", "DRUNKENNESS", "EMBEZZLEMENT", "EXTORTION", "FAMILY OFFENSES",
+    "FORGERY/COUNTERFEITING", "FRAUD", "GAMBLING", "KIDNAPPING", "LARCENY/THEFT", "LIQUOR LAWS", "LOITERING", "MISSING PERSON", "NON-CRIMINAL", "OTHER OFFENSES", "PORNOGRAPHY/OBSCENE MAT", "PROSTITUTION", "RECOVERED VEHICLE",
+        "ROBBERY", "RUNAWAY", "SECONDARY CODES", "SEX OFFENSES FORCIBLE", "SEX OFFENSES NON FORCIBLE", "STOLEN PROPERTY", "SUICIDE", "SUSPICIOUS OCC", "TREA", "TRESPASS", "VANDALISM", "VEHICLE THEFT",
+            "WARRANTS", "WEAPON LAWS" };
 
 using namespace std;
 
@@ -11,7 +15,7 @@ ParserCSV::ParserCSV(string trainPath, string testPath, string submissionPath) {
 }
 
 vector<Crimen*> ParserCSV::parseTrain() {
-    vector<Crimen*> crimenes = preprocessCrimes(train);
+    vector<Crimen*>* crimenes = preprocessCrimes(train);
     completeCrimesAttributes(train, crimenes);
     return crimenes;
 }
@@ -22,11 +26,18 @@ void ParserCSV::writeRowSubmission(vector<double> probsPerCrime) {
 
     string linea;
     if ( ! this.submissionHasHeader ) {
-        // TODO: Escribir header del csv.
+        vector<string> header = categoriasCrimen;
+        header.insert(header.begin(), this.countSubmissionRows)   // Agrego Id.
+        for ( vector<double>::iterator it = header.begin(); it != header.end(); ++it ) {
+            this.submission << *it << "," << endl;
+        }
         this.submissionHasHeader = true;
     }
 
-    // TODO: Escribir row de probabilidades.
+    probsPerCrime.insert(probsPerCrime.begin(), this.countSubmissionRows)   // Agrego Id.
+    for ( vector<double>::iterator it = probsPerCrime.begin(); it != probsPerCrime.end(); ++it ) {
+        this.submission << *it << "," << endl;
+    }
 
 }
 
@@ -76,19 +87,26 @@ ofstream ParserCSV::openSubmission() {
 }
 
 /** Primera lectura del train. **/
-vector<Crimen*> ParserCSV::preprocessCrimes(ifstream train) {
-    vector<Crimen*> crimenes(CANT_CATEGORIAS, nullptr);  // Inicializo vector de crimenes en null.
+vector<Crimen*>* ParserCSV::preprocessCrimes(ifstream train) {
+    vector<Crimen*>* crimenes = new vector<Crimen*>(CANT_CATEGORIAS, nullptr);  // Inicializo vector de crimenes en null.
 
+    int countRows = 0
     ifstream train = openTrain();
     if ( train.is_open() ) {
         string linea;
         getline (train, linea);     // No utilizo el header.
         while ( train.good() ) {
             getline (train, linea);
-            tokenizeLineToCrime(linea, &crimenes);
+            tokenizeLineToCrime(linea, crimenes);
+            countRows++;
         }
     }
     train.close();
+
+    // Calculo probabiidades por Laplace de cada categoria de crimen dentro del dataset.
+    for ( Crimen* crimen : crimenes ) {
+        crimen->proba_crimen = crimen->apariciones / countRows;
+    }
 
     this.trainWasPreprocessed = true;
 
@@ -103,7 +121,7 @@ void ParserCSV::completeCrimesAttributes(ifstream train, vector<Crimen*>* crimen
         getline (train, linea);     // No utilizo el header.
         while ( train.good() ) {
             getline (train, linea);
-            tokenizeLineToCrime(linea, &crimenes);
+            tokenizeLineToCrime(linea, crimenes);
         }
     }
     train.close();
@@ -112,7 +130,7 @@ void ParserCSV::completeCrimesAttributes(ifstream train, vector<Crimen*>* crimen
 }
 
 /** Pasa una linea a crimen con sus features y contadores respectivos. **/
-void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*> &crimenes) {
+void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
     istringstream streamLine(line);
     string featureString;
     Crimen* categoria;
@@ -121,12 +139,14 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*> &crimenes) {
         switch (i) {
             case TrainColumns.CATEGORY: {   // La Category es la primera columna del CSV. Por lo tanto, todas las features siguientes seran validas.
                     int categoryIndex = parseCategory(featureString);
-                    if ( ! crimenes[i]) {
-                        categoria = new Crimen(categoryIndex);
-                        crimenes[i] = categoria
+                    Crimen* crimen = crimenes->at(i);
+                    if ( ! crimen) {
+                        categoria = new Crimen();
                     } else {
-                        categoria = crimenes[i];
+                        crimen->apariciones++;
+                        categoria = crimen;
                     }
+                    crimenes->at(i) = categoria;
                 }
                 break;
             case TrainColumns.DISTRICT: {
@@ -166,11 +186,6 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*> &crimenes) {
 }
 
 int ParserCSV::parseCategory(string category) {
-    vector<string> categoriasCrimen(CANT_CATEGORIAS) { "ARSON", "ASSAULT", "BAD CHECKS", "BRIBERY", "BURGLARY", "DISORDERLY CONDUCT", "DRIVING UNDER THE INFLUENCE", "DRUG/NARCOTIC", "DRUNKENNESS", "EMBEZZLEMENT", "EXTORTION", "FAMILY OFFENSES",
-    "FORGERY/COUNTERFEITING", "FRAUD", "GAMBLING", "KIDNAPPING", "LARCENY/THEFT", "LIQUOR LAWS", "LOITERING", "MISSING PERSON", "NON-CRIMINAL", "OTHER OFFENSES", "PORNOGRAPHY/OBSCENE MAT", "PROSTITUTION", "RECOVERED VEHICLE",
-        "ROBBERY", "RUNAWAY", "SECONDARY CODES", "SEX OFFENSES FORCIBLE", "SEX OFFENSES NON FORCIBLE", "STOLEN PROPERTY", "SUICIDE", "SUSPICIOUS OCC", "TREA", "TRESPASS", "VANDALISM", "VEHICLE THEFT",
-            "WARRANTS", "WEAPON LAWS" };
-
     vector<string>::iterator it;
     int categoryIndex = 0;
     for ( it = categoriasCrimen.begin(); it < categoriasCrimen.end(); it++, i++ ) {

@@ -10,16 +10,13 @@
 
 class Feature {
 private:
-	int cantidad;
-	int sumatoria;
-	float media;
-	float varianza;
 
 public:
-	int getCantidad();
-	int getSumatoria();
-	float getMedia();
-	float getVarianza();
+    int cantidad;
+	int sumatoria;
+    double varianza;
+
+	double getMedia();
 
 	Feature();
 	virtual ~Feature();
