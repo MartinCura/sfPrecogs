@@ -8,6 +8,8 @@
 #ifndef TESTROW_H_
 #define TESTROW_H_
 
+#include "Enum.h"
+
 class TestRow {
 private:
 	int r_district;
@@ -18,7 +20,7 @@ private:
 	int r_cuad;
 
 public:
-	TestRow();
+	TestRow(int districtValue, int yearValue, int monthValue, int dayOfWeekValue, int hourValue, int cuadValue);
 
 	int getFeatureRow(TipoFeature tipo);
 

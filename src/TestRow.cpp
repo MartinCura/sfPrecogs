@@ -7,15 +7,13 @@
 
 #include "TestRow.h"
 
-
-
-TestRow::TestRow() {
-	r_district = 0;
-	r_dayWeek = 0;
-	r_anio = 0;
-	r_mes = 0;
-	r_hora = 0;
-	r_cuad = 0;
+TestRow::TestRow(int districtValue, int yearValue, int monthValue, int dayOfWeekValue, int hourValue, int cuadValue) {
+	r_district = districtValue;
+	r_dayWeek = dayOfWeekValue;
+	r_anio = yearValue;
+	r_mes = monthValue;
+	r_hora = hourValue;
+	r_cuad = cuadValue;
 }
 
 int TestRow::getFeatureRow(TipoFeature tipo){
