@@ -141,7 +141,7 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
             case CATEGORY_TRAIN: {   // La Category es la primera columna del CSV. Por lo tanto, todas las features siguientes seran validas.
                     int categoryIndex = parseCategory(featureString);
                     Crimen* crimen = crimenes->at(categoryIndex);
-                    if ( ! crimen) {
+                    if ( ! crimen ) {
                         categoria = new Crimen();
                     } else {
                         crimen->apariciones++;
@@ -176,7 +176,7 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
                 }
                 break;
             case CUAD_TRAIN: {
-                    int cuadValue = stoi(featureString);
+                    int cuadValue = atoi(featureString.data());
                     updateFeatureCounters(categoria->f_cuad, cuadValue);
                 }
                 break;
@@ -194,83 +194,85 @@ int ParserCSV::parseCategory(string category) {
     /*
     int categoryIndex;
     if ( ! category.compare("ARSON") )
-        categoryIndex = CategoriasCrimen.ARSON;
+        categoryIndex = ARSON;
     else if ( ! category.compare("ASSAULT") )
-        categoryIndex = CategoriasCrimen.ASSAULT;
+        categoryIndex = ASSAULT;
     else if ( ! category.compare("BAD CHECKS") )
-        categoryIndex = CategoriasCrimen.BAD_CHECKS;
+        categoryIndex = BAD_CHECKS;
     else if ( ! category.compare("BRIBERY") )
-        categoryIndex = CategoriasCrimen.BRIBERY;
+        categoryIndex = BRIBERY;
     else if ( ! category.compare("BURGLARY") )
-        categoryIndex = CategoriasCrimen.BURGLARY;
+        categoryIndex = BURGLARY;
     else if ( ! category.compare("DISORDERLY CONDUCT") )
-        categoryIndex = CategoriasCrimen.DISORDERLY_CONDUCT;
+        categoryIndex = DISORDERLY_CONDUCT;
     else if ( ! category.compare("DRIVING UNDER THE INFLUENCE") )
-        categoryIndex = CategoriasCrimen.DRIVING_UNDER_INFLUENCE;
+        categoryIndex = DRIVING_UNDER_INFLUENCE;
     else if ( ! category.compare("DRUG/NARCOTIC") )
-        categoryIndex = CategoriasCrimen.DRUG_NARCOTIC;
+        categoryIndex = DRUG_NARCOTIC;
     else if ( ! category.compare("DRUNKENNESS") )
-        categoryIndex = CategoriasCrimen.DRUNKENNESS;
+        categoryIndex = DRUNKENNESS;
     else if ( ! category.compare("EMBEZZLEMENT") )
-        categoryIndex = CategoriasCrimen.EMBEZZLEMENT;
+        categoryIndex = EMBEZZLEMENT;
     else if ( ! category.compare("EXTORTION") )
-        categoryIndex = CategoriasCrimen.EXTORTION;
+        categoryIndex = EXTORTION;
     else if ( ! category.compare("FAMILY OFFENSES") )
-        categoryIndex = CategoriasCrimen.FAMILY_OFFENSES;
+        categoryIndex = FAMILY_OFFENSES;
     else if ( ! category.compare("FORGERY/COUNTERFEITING") )
-        categoryIndex = CategoriasCrimen.FORGERY_COUNTERFEITING;
+        categoryIndex = FORGERY_COUNTERFEITING;
     else if ( ! category.compare("FRAUD") )
-        categoryIndex = CategoriasCrimen.FRAUD;
+        categoryIndex = FRAUD;
     else if ( ! category.compare("GAMBLING") )
-        categoryIndex = CategoriasCrimen.GAMBLING;
+        categoryIndex = GAMBLING;
     else if ( ! category.compare("KIDNAPPING") )
-        categoryIndex = CategoriasCrimen.KIDNAPPING;
+        categoryIndex = KIDNAPPING;
     else if ( ! category.compare("LARCENY/THEFT") )
-        categoryIndex = CategoriasCrimen.LARCENY_THEFT;
+        categoryIndex = LARCENY_THEFT;
     else if ( ! category.compare("LIQUOR LAWS") )
-        categoryIndex = CategoriasCrimen.LIQUOR_LAWS;
+        categoryIndex = LIQUOR_LAWS;
     else if ( ! category.compare("LOITERING") )
-        categoryIndex = CategoriasCrimen.LOITERING;
+        categoryIndex = LOITERING;
     else if ( ! category.compare("MISSING PERSON") )
-        categoryIndex = CategoriasCrimen.MISSING_PERSON;
+        categoryIndex = MISSING_PERSON;
     else if ( ! category.compare("NON-CRIMINAL") )
-        categoryIndex = CategoriasCrimen.NON_CRIMINAL;
+        categoryIndex = NON_CRIMINAL;
     else if ( ! category.compare("OTHER OFFENSES") )
-        categoryIndex = CategoriasCrimen.OTHER_OFFENSES;
+        categoryIndex = OTHER_OFFENSES;
     else if ( ! category.compare("PORNOGRAPHY/OBSCENE MAT") )
-        categoryIndex = CategoriasCrimen.PORNOGRAPHY;
+        categoryIndex = PORNOGRAPHY;
     else if ( ! category.compare("PROSTITUTION") )
-        categoryIndex = CategoriasCrimen.PROSTITUTION;
+        categoryIndex = PROSTITUTION;
     else if ( ! category.compare("RECOVERED VEHICLE") )
-        categoryIndex = CategoriasCrimen.RECOVERED_VEHICLE;
+        categoryIndex = RECOVERED_VEHICLE;
     else if ( ! category.compare("ROBBERY") )
-        categoryIndex = CategoriasCrimen.ROBBERY;
+        categoryIndex = ROBBERY;
     else if ( ! category.compare("RUNAWAY") )
-        categoryIndex = CategoriasCrimen.RUNAWAY;
+        categoryIndex = RUNAWAY;
     else if ( ! category.compare("SECONDARY CODES") )
-        categoryIndex = CategoriasCrimen.SECONDARY_CODES;
+        categoryIndex = SECONDARY_CODES;
     else if ( ! category.compare("SEX OFFENSES FORCIBLE") )
-        categoryIndex = CategoriasCrimen.SEX_OFFENSES_FORCIBLE;
+        categoryIndex = SEX_OFFENSES_FORCIBLE;
     else if ( ! category.compare("SEX OFFENSES NON FORCIBLE") )
-        categoryIndex = CategoriasCrimen.SEX_OFFENSES_NON_FORCIBLE;
+        categoryIndex = SEX_OFFENSES_NON_FORCIBLE;
     else if ( ! category.compare("STOLEN PROPERTY") )
-        categoryIndex = CategoriasCrimen.STOLEN_PROPERTY;
+        categoryIndex = STOLEN_PROPERTY;
     else if ( ! category.compare("SUICIDE") )
-        categoryIndex = CategoriasCrimen.SUICIDE;
+        categoryIndex = SUICIDE;
     else if ( ! category.compare("SUSPICIOUS OCC") )
-        categoryIndex = CategoriasCrimen.SUSPICIOUS_OCC;
+        categoryIndex = SUSPICIOUS_OCC;
     else if ( ! category.compare("TREA") )
-        categoryIndex = CategoriasCrimen.TREA;
+        categoryIndex = TREA;
     else if ( ! category.compare("TRESPASS") )
-        categoryIndex = CategoriasCrimen.TRESPASS;
+        categoryIndex = TRESPASS;
     else if ( ! category.compare("VANDALISM") )
-        categoryIndex = CategoriasCrimen.VANDALISM;
+        categoryIndex = VANDALISM;
     else if ( ! category.compare("VEHICLE THEFT") )
-        categoryIndex = CategoriasCrimen.VEHICLE_THEFT;
+        categoryIndex = VEHICLE_THEFT;
     else if ( ! category.compare("WARRANTS") )
-        categoryIndex = CategoriasCrimen.WARRANTS;
+        categoryIndex = WARRANTS;
     else if ( ! category.compare("WEAPON LAWS") )
-        categoryIndex = CategoriasCrimen.WEAPON_LAWS;
+        categoryIndex = WEAPON_LAWS;
+
+    return categoryIndex;
     */
 }
 
@@ -284,16 +286,18 @@ int ParserCSV::parseDistrict(string district) {
 
 int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
     vector<string>::iterator it;
-    int featureIndex = 0;
+    int featureIndex;
     int i = 0;
     for ( it = featureVector.begin(); it < featureVector.end(); it++, i++ ) {
-        if ( ! it->compare(feature) ) {
+        if ( it->compare(feature) == 0 ) {
             featureIndex = i;
             break;
         }
     }
+
     return featureIndex;
 }
+
 
 void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
     if ( ! this->trainWasPreprocessed ) {
@@ -314,19 +318,19 @@ TestRow* ParserCSV::parseLineToTestRow(string line) {
                 districtValue = parseDistrict(featureString);
                 break;
             case YEAR_TEST:
-                yearValue = stoi(featureString);
+                yearValue = atoi(featureString.data());
                 break;
             case MONTH_TEST:
-                monthValue = stoi(featureString);
+                monthValue = atoi(featureString.data());
                 break;
             case DAYOFWEEK_TEST:
-                dayOfWeekValue = stoi(featureString);
+                dayOfWeekValue = atoi(featureString.data());
                 break;
             case HOUR_TEST:
-                hourValue = stoi(featureString);
+                hourValue = atoi(featureString.data());
                 break;
             case CUAD_TEST:
-                cuadValue = stoi(featureString);
+                cuadValue = atoi(featureString.data());
                 break;
             default:
                 break;
