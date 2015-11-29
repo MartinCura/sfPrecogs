@@ -6,8 +6,8 @@ const vector<string> categoriasCrimen { "ARSON", "ASSAULT", "BAD CHECKS", "BRIBE
             "FORGERY/COUNTERFEITING", "FRAUD", "GAMBLING", "KIDNAPPING", "LARCENY/THEFT", "LIQUOR LAWS", "LOITERING", "MISSING PERSON", "NON-CRIMINAL", "OTHER OFFENSES", "PORNOGRAPHY/OBSCENE MAT", "PROSTITUTION", "RECOVERED VEHICLE",
             "ROBBERY", "RUNAWAY", "SECONDARY CODES", "SEX OFFENSES FORCIBLE", "SEX OFFENSES NON FORCIBLE", "STOLEN PROPERTY", "SUICIDE", "SUSPICIOUS OCC", "TREA", "TRESPASS", "VANDALISM", "VEHICLE THEFT",
                 "WARRANTS", "WEAPON LAWS" };
-
-const vector<string> districts { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+const vector<string> daysOfWeek { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+const vector<string> districts { "BAYVIEW", "CENTRAL", "INGLESIDE", "MISSION", "NORTHERN", "PARK", "RICHMOND", "SOUTHERN", "TARAVAL", "TENDERLOIN" };
 
 using namespace std;
 
@@ -266,8 +266,7 @@ int ParserCSV::parseCategory(string category) {
 }
 
 int ParserCSV::parseDayOfWeek(string dayOfWeek) {
-    // TODO.
-    return 0;
+    return parseFeature(dayOfWeek, daysOfWeek);
 }
 
 int ParserCSV::parseDistrict(string district) {
