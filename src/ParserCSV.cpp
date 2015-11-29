@@ -98,14 +98,16 @@ vector<Crimen*>* ParserCSV::preprocessCrimes() {
             tokenizeLineToCrime(linea, crimenes);
             countRows++;
         }
+        train.close();
     }
-    train.close();
 
     // Calculo probabiidades por Laplace de cada categoria de crimen dentro del dataset.
-    for ( vector<Crimen*>::iterator it = crimenes->begin(); it != crimenes->end(); ++it ) {
-        Crimen* crimen = *it;
-        crimen->proba_crimen = crimen->apariciones / (double) countRows;
-    }
+    vector<Crimen*>::iterator it = crimenes->begin();
+	while (it != crimenes->end()){
+		Crimen* crimen = *it;
+		crimen->proba_crimen = crimen->apariciones / (double) countRows;
+		it++;
+	}
 
     this->trainWasPreprocessed = true;
 
@@ -154,22 +156,22 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
                 }
                 break;
             case YEAR_TRAIN: {
-                    int yearValue = stoi(featureString);
+                    int yearValue = atoi(featureString.data());
                     updateFeatureCounters(categoria->f_anio, yearValue);
                 }
                 break;
             case MONTH_TRAIN: {
-                    int monthValue = stoi(featureString);
+                    int monthValue = atoi(featureString.data());
                     updateFeatureCounters(categoria->f_mes, monthValue);
                 }
                 break;
             case DAYOFWEEK_TRAIN: {
-                    int dayOfWeekValue = stoi(featureString);
+                    int dayOfWeekValue = atoi(featureString.data());
                     updateFeatureCounters(categoria->f_dayWeek, dayOfWeekValue);
                 }
                 break;
             case HOUR_TRAIN: {
-                    int hourValue = stoi(featureString);
+                    int hourValue = atoi(featureString.data());
                     updateFeatureCounters(categoria->f_hora, hourValue);
                 }
                 break;
@@ -270,7 +272,6 @@ int ParserCSV::parseCategory(string category) {
     else if ( ! category.compare("WEAPON LAWS") )
         categoryIndex = CategoriasCrimen.WEAPON_LAWS;
     */
-
 }
 
 int ParserCSV::parseDayOfWeek(string dayOfWeek) {
