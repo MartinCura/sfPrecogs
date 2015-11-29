@@ -1,97 +1,87 @@
 #include "ParserCSV.h"
 
 const int CANT_CATEGORIAS = 39;
-const vector<string> categoriasCrimen(CANT_CATEGORIAS) { "ARSON", "ASSAULT", "BAD CHECKS", "BRIBERY", "BURGLARY", "DISORDERLY CONDUCT", "DRIVING UNDER THE INFLUENCE", "DRUG/NARCOTIC", "DRUNKENNESS", "EMBEZZLEMENT", "EXTORTION", "FAMILY OFFENSES",
-    "FORGERY/COUNTERFEITING", "FRAUD", "GAMBLING", "KIDNAPPING", "LARCENY/THEFT", "LIQUOR LAWS", "LOITERING", "MISSING PERSON", "NON-CRIMINAL", "OTHER OFFENSES", "PORNOGRAPHY/OBSCENE MAT", "PROSTITUTION", "RECOVERED VEHICLE",
-        "ROBBERY", "RUNAWAY", "SECONDARY CODES", "SEX OFFENSES FORCIBLE", "SEX OFFENSES NON FORCIBLE", "STOLEN PROPERTY", "SUICIDE", "SUSPICIOUS OCC", "TREA", "TRESPASS", "VANDALISM", "VEHICLE THEFT",
-            "WARRANTS", "WEAPON LAWS" };
+
+const vector<string> categoriasCrimen { "ARSON", "ASSAULT", "BAD CHECKS", "BRIBERY", "BURGLARY", "DISORDERLY CONDUCT", "DRIVING UNDER THE INFLUENCE", "DRUG/NARCOTIC", "DRUNKENNESS", "EMBEZZLEMENT", "EXTORTION", "FAMILY OFFENSES",
+            "FORGERY/COUNTERFEITING", "FRAUD", "GAMBLING", "KIDNAPPING", "LARCENY/THEFT", "LIQUOR LAWS", "LOITERING", "MISSING PERSON", "NON-CRIMINAL", "OTHER OFFENSES", "PORNOGRAPHY/OBSCENE MAT", "PROSTITUTION", "RECOVERED VEHICLE",
+            "ROBBERY", "RUNAWAY", "SECONDARY CODES", "SEX OFFENSES FORCIBLE", "SEX OFFENSES NON FORCIBLE", "STOLEN PROPERTY", "SUICIDE", "SUSPICIOUS OCC", "TREA", "TRESPASS", "VANDALISM", "VEHICLE THEFT",
+                "WARRANTS", "WEAPON LAWS" };
+
+const vector<string> districts { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 
 using namespace std;
 
 ParserCSV::ParserCSV(string trainPath, string testPath, string submissionPath) {
-    this.trainPath = trainPath;
-    this.testPath = testPath;
-    this.submissionPath = submissionPath;
+    this->trainPath = trainPath;
+    this->testPath = testPath;
+    this->submissionPath = submissionPath;
 }
 
-vector<Crimen*> ParserCSV::parseTrain() {
-    vector<Crimen*>* crimenes = preprocessCrimes(train);
-    completeCrimesAttributes(train, crimenes);
+vector<Crimen*>* ParserCSV::parseTrain() {
+    vector<Crimen*>* crimenes = preprocessCrimes();
+    completeCrimesAttributes(crimenes);
     return crimenes;
 }
 
-void ParserCSV::writeRowSubmission(vector<double> probsPerCrime) {
-    if ( ! this.submission.is_open() )
-        openSubmission();
-
-    string linea;
-    if ( ! this.submissionHasHeader ) {
-        vector<string> header = categoriasCrimen;
-        header.insert(header.begin(), this.countSubmissionRows)   // Agrego Id.
-        for ( vector<double>::iterator it = header.begin(); it != header.end(); ++it ) {
-            this.submission << *it << "," << endl;
-        }
-        this.submissionHasHeader = true;
+void ParserCSV::writeRowSubmission(vector<double>* probsPerCrime) {
+    if ( ! this->submission.is_open() ) {
+        this->submission.open( this->submissionPath );   // Open submission.
     }
 
-    probsPerCrime.insert(probsPerCrime.begin(), this.countSubmissionRows)   // Agrego Id.
-    for ( vector<double>::iterator it = probsPerCrime.begin(); it != probsPerCrime.end(); ++it ) {
-        this.submission << *it << "," << endl;
+    string linea;
+    if ( ! this->submissionHasHeader ) {
+
+        vector<string> header = categoriasCrimen;
+        header.insert(header.begin(), to_string(this->countSubmissionRows));   // Agrego Id.
+        for ( vector<string>::iterator it = header.begin(); it != header.end(); ++it ) {
+            this->submission << *it << "," << endl;
+        }
+        this->submissionHasHeader = true;
+    }
+
+    probsPerCrime->insert(probsPerCrime->begin(), this->countSubmissionRows);   // Agrego Id.
+    for ( vector<double>::iterator it = probsPerCrime->begin(); it != probsPerCrime->end(); ++it ) {
+        this->submission << *it << "," << endl;
     }
 
 }
 
 /** Devuelve nullptr si ya se leyo todo el test.csv. **/
 TestRow* ParserCSV::getNextTestRow() {
-    if ( ! this.test.is_open() )
-        openTest();
-
-    string linea;
-    if ( ! this.testHasSkippedHeader ) {
-        getline (this.test, linea);     // No leo el header, lo salteo.
-        this.testHasSkippedHeader = true;
+    if ( ! this->test.is_open() ) {
+        this->test.open( this->testPath );   // Open test.
     }
 
-    if ( this.test.good() ) {
-        getline(this.test, linea);
+    string linea;
+    if ( ! this->testHasSkippedHeader ) {
+        getline (this->test, linea);     // No leo el header, lo salteo.
+        this->testHasSkippedHeader = true;
+    }
+
+    if ( this->test.good() ) {
+        getline(this->test, linea);
         TestRow* row = parseLineToTestRow(linea);
         return row;
     } else {
-        this.test.close();
+        this->test.close();
         return nullptr;
     }
 
 }
 
 ParserCSV::~ParserCSV() {
-    if ( this.test.is_open() )
-        this.test.close();
-    if ( this.submission.is_open() )
-        this.submission.close();
-}
-
-ifstream ParserCSV::openTrain() {
-    return ifstream file ( trainPath );
-}
-
-ifstream ParserCSV::openTest() {
-    ifstream file ( testPath );
-    this.test = file;
-    return file;
-}
-
-ofstream ParserCSV::openSubmission() {
-    ofstream file ( submissionPath );
-    this.submission = file;
-    return file;
+    if ( this->test.is_open() )
+        this->test.close();
+    if ( this->submission.is_open() )
+        this->submission.close();
 }
 
 /** Primera lectura del train. **/
-vector<Crimen*>* ParserCSV::preprocessCrimes(ifstream train) {
+vector<Crimen*>* ParserCSV::preprocessCrimes() {
     vector<Crimen*>* crimenes = new vector<Crimen*>(CANT_CATEGORIAS, nullptr);  // Inicializo vector de crimenes en null.
 
-    int countRows = 0
-    ifstream train = openTrain();
+    int countRows = 0;
+    ifstream train ( trainPath );   // Open test.
     if ( train.is_open() ) {
         string linea;
         getline (train, linea);     // No utilizo el header.
@@ -104,18 +94,18 @@ vector<Crimen*>* ParserCSV::preprocessCrimes(ifstream train) {
     train.close();
 
     // Calculo probabiidades por Laplace de cada categoria de crimen dentro del dataset.
-    for ( Crimen* crimen : crimenes ) {
-        crimen->proba_crimen = crimen->apariciones / countRows;
+    for ( vector<Crimen*>::iterator it = crimenes->begin(); it != crimenes->end(); ++it ) {
+        it->proba_crimen = it->apariciones / countRows;
     }
 
-    this.trainWasPreprocessed = true;
+    this->trainWasPreprocessed = true;
 
     return crimenes;
 }
 
 /** Segunda lectura del train (para la varianza, la media ya la tengo) **/
-void ParserCSV::completeCrimesAttributes(ifstream train, vector<Crimen*>* crimenes) {
-    ifstream train = openTrain();
+void ParserCSV::completeCrimesAttributes(vector<Crimen*>* crimenes) {
+    ifstream train ( trainPath );   // Open test.
     if ( train.is_open() ) {
         string linea;
         getline (train, linea);     // No utilizo el header.
@@ -126,7 +116,7 @@ void ParserCSV::completeCrimesAttributes(ifstream train, vector<Crimen*>* crimen
     }
     train.close();
 
-    this.trainWasPreprocessed = false;
+    this->trainWasPreprocessed = false;
 }
 
 /** Pasa una linea a crimen con sus features y contadores respectivos. **/
@@ -137,44 +127,44 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
     int i = 0;
     while(getline(streamLine, featureString, ',')) {
         switch (i) {
-            case TrainColumns.CATEGORY: {   // La Category es la primera columna del CSV. Por lo tanto, todas las features siguientes seran validas.
+            case CATEGORY_TRAIN: {   // La Category es la primera columna del CSV. Por lo tanto, todas las features siguientes seran validas.
                     int categoryIndex = parseCategory(featureString);
-                    Crimen* crimen = crimenes->at(i);
+                    Crimen* crimen = crimenes->at(categoryIndex);
                     if ( ! crimen) {
                         categoria = new Crimen();
                     } else {
                         crimen->apariciones++;
                         categoria = crimen;
                     }
-                    crimenes->at(i) = categoria;
+                    crimenes->at(categoryIndex) = categoria;
                 }
                 break;
-            case TrainColumns.DISTRICT: {
+            case DISTRICT_TRAIN: {
                     int districtValue = parseDistrict(featureString);
                     updateFeatureCounters(categoria->f_district, districtValue);
                 }
                 break;
-            case TrainColumns.YEAR: {
+            case YEAR_TRAIN: {
                     int yearValue = int(featureString);
                     updateFeatureCounters(categoria->f_anio, yearValue);
                 }
                 break;
-            case TrainColumns.MONTH: {
+            case MONTH_TRAIN: {
                     int monthValue = int(featureString);
                     updateFeatureCounters(categoria->f_mes, monthValue);
                 }
                 break;
-            case TrainColumns.DAYOFWEEK: {
+            case DAYOFWEEK_TRAIN: {
                     int dayOfWeekValue = int(featureString);
                     updateFeatureCounters(categoria->f_dayWeek, dayOfWeekValue);
                 }
                 break;
-            case TrainColumns.HOUR: {
+            case HOUR_TRAIN: {
                     int hourValue = int(featureString);
                     updateFeatureCounters(categoria->f_hora, hourValue);
                 }
                 break;
-            case TrainColumns.CUAD: {
+            case CUAD_TRAIN: {
                     int cuadValue = int(featureString);
                     updateFeatureCounters(categoria->f_cuad, cuadValue);
                 }
@@ -182,20 +172,12 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
             default:
                 break;
         }
+        i++;
     }
 }
 
 int ParserCSV::parseCategory(string category) {
-    vector<string>::iterator it;
-    int categoryIndex = 0;
-    for ( it = categoriasCrimen.begin(); it < categoriasCrimen.end(); it++, i++ ) {
-        if ( ! it->compare(category) ) {
-            categoryIndex = i;
-            break;
-        }
-    }
-
-    return categoryIndex
+    return parseFeature(category, categoriasCrimen);
 
 
     /*
@@ -283,38 +265,31 @@ int ParserCSV::parseCategory(string category) {
 }
 
 int ParserCSV::parseDayOfWeek(string dayOfWeek) {
-    vector<string> daysOfTheWeek(7) { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-
-    vector<string>::iterator it;
-    int dayOfWeekIndex = 0;
-    for ( it = daysOfTheWeek.begin(); it < daysOfTheWeek.end(); it++, i++ ) {
-        if ( ! it->compare(category) ) {
-            dayOfWeekIndex = i;
-            break;
-        }
-    }
-    return dayOfWeekIndex
+    // TODO.
+    return 0;
 }
 
 int ParserCSV::parseDistrict(string district) {
-    vector<string> districts(7) { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    return parseFeature(district, districts);
+}
 
+int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
     vector<string>::iterator it;
-    int districtIndex = 0;
-    for ( it = districts.begin(); it < districts.end(); it++, i++ ) {
-        if ( ! it->compare(category) ) {
-            districtIndex = i;
+    int featureIndex = 0;
+    for ( it = featureVector.begin(); it < featureVector.end(); it++, i++ ) {
+        if ( ! it->compare(feature) ) {
+            featureIndex = i;
             break;
         }
     }
-    return districtIndex
+    return featureIndex
 }
 
-void ParserCSV::updateFeatureCounters(Feature* feature, currentValue) {
-    if ( ! this.trainWasPreprocessed ) {
+void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
+    if ( ! this->trainWasPreprocessed ) {
         feature->cantidad++
         feature->sumatoria += currentValue;
-    } else if ( this.trainWasPreprocessed )
+    } else if ( this->trainWasPreprocessed )
         feature->varianza += ( 1 / feature->cantidad ) * ( currentValue - feature->getMedia() )
 }
 
@@ -325,27 +300,28 @@ TestRow* ParserCSV::parseLineToTestRow(string line) {
     int districtValue, yearValue, monthValue, dayOfWeekValue, hourValue, cuadValue;
     while( getline(streamLine, featureString, ',') ) {
         switch (i) {
-            case TestColumns.DISTRICT:
+            case DISTRICT_TEST:
                 districtValue = parseDistrict(featureString);
                 break;
-            case TestColumns.YEAR:
+            case YEAR_TEST:
                 yearValue = int(featureString);
                 break;
-            case TestColumns.MONTH:
+            case MONTH_TEST:
                 monthValue = int(featureString);
                 break;
-            case TestColumns.DAYOFWEEK:
+            case DAYOFWEEK_TEST:
                 dayOfWeekValue = int(featureString);
                 break;
-            case TestColumns.HOUR:
+            case HOUR_TEST:
                 hourValue = int(featureString);
                 break;
-            case TestColumns.CUAD:
+            case CUAD_TEST:
                 cuadValue = int(featureString);
                 break;
             default:
                 break;
         }
+        i++;
     }
     TestRow* row = new TestRow(districtValue, yearValue, monthValue, dayOfWeekValue, hourValue, cuadValue);
     return row;

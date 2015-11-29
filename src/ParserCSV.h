@@ -18,14 +18,11 @@ using namespace std;
 class ParserCSV {
     public:
         ParserCSV(string trainPath, string testPath, string submissionPath);
-        vector<Crimen*> parseTrain();
+        vector<Crimen*>* parseTrain();
         TestRow* getNextTestRow();
-        void writeRowSubmission(vector<double> probsPerCrime);
+        void writeRowSubmission(vector<double>* probsPerCrime);
         virtual ~ParserCSV();
     protected:
-        ifstream openTrain();
-        ifstream openTest();
-        ifstream openSubmission();
     private:
         string trainPath;
         string testPath;
@@ -40,14 +37,15 @@ class ParserCSV {
 
         bool trainWasPreprocessed = false;
 
-        vector<Crimen*>* preprocessCrimes(ifstream train);
-        void completeCrimesAttributes(ifstream train, vector<Crimen*>* crimenes);
+        vector<Crimen*>* preprocessCrimes();
+        void completeCrimesAttributes(vector<Crimen*>* crimenes);
         void tokenizeLineToCrime(string line, vector<Crimen*>* crimenes);
         int parseCategory(string category);
         int parseDayOfWeek(string dayOfWeek);
         int parseDistrict(string district);
+        int parseFeature(string feature, vector<string> featureVector);
         TestRow* parseLineToTestRow(string line);
-        void updateFeatureCounters(Feature* feature, currentValue);
+        void updateFeatureCounters(Feature* feature, int currentValue);
         void putHeaderInSubmission();
 };
 
