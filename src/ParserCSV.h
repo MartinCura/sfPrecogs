@@ -5,7 +5,6 @@
 #include <vector>
 #include <iostream>
 #include <vector>
-#include "Statistics.h"
 #include "Enum.h"
 #include "TestRow.h"
 #include "Crimen.h"
