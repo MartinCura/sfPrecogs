@@ -14,6 +14,7 @@ ClasificadorBayesiano::ClasificadorBayesiano(vector<Crimen*>* v_crimenes) {
 }
 
 vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
+	probabilidades->clear();
 	int CANT_CRIMENES = 40;
 	int CANT_FEATURES = 6;
 	// For para cada CRIMEN:
