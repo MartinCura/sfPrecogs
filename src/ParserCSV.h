@@ -21,6 +21,7 @@ class ParserCSV {
         vector<Crimen*>* parseTrain();
         TestRow* getNextTestRow();
         void writeRowSubmission(vector<double>* probsPerCrime);
+        bool closeSubmission();
         virtual ~ParserCSV();
     protected:
     private:

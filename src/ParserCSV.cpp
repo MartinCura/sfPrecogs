@@ -43,7 +43,15 @@ void ParserCSV::writeRowSubmission(vector<double>* probsPerCrime) {
     for ( vector<double>::iterator it = probsPerCrime->begin(); it != probsPerCrime->end(); ++it ) {
         this->submission << *it << "," << endl;
     }
+}
 
+bool ParserCSV::closeSubmission() {
+    if ( this->submission.is_open() ) {
+        this->submission.close();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /** Devuelve nullptr si ya se leyo todo el test.csv. **/

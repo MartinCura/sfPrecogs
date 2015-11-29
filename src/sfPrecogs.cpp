@@ -38,6 +38,13 @@ int main() {
 		vector<double>* probas = clasificador->predictProba(row_test);
 		parser->writeRowSubmission(probas);
 	}
+	parser->closeSubmission();
+
+    delete parser;
+    delete clasificador;
+
+    v_crimenes->clear();
+    delete v_crimenes;
 
 	return 0;
 }
