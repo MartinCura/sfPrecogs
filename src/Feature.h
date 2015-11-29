@@ -17,6 +17,7 @@ public:
     double varianza;
 
 	double getMedia();
+	double getVarianza();
 
 	Feature();
 	virtual ~Feature();

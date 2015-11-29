@@ -95,7 +95,8 @@ vector<Crimen*>* ParserCSV::preprocessCrimes() {
 
     // Calculo probabiidades por Laplace de cada categoria de crimen dentro del dataset.
     for ( vector<Crimen*>::iterator it = crimenes->begin(); it != crimenes->end(); ++it ) {
-        it->proba_crimen = it->apariciones / countRows;
+        Crimen* crimen = *it;
+        crimen->proba_crimen = crimen->apariciones / (double) countRows;
     }
 
     this->trainWasPreprocessed = true;
@@ -145,27 +146,27 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
                 }
                 break;
             case YEAR_TRAIN: {
-                    int yearValue = int(featureString);
+                    int yearValue = stoi(featureString);
                     updateFeatureCounters(categoria->f_anio, yearValue);
                 }
                 break;
             case MONTH_TRAIN: {
-                    int monthValue = int(featureString);
+                    int monthValue = stoi(featureString);
                     updateFeatureCounters(categoria->f_mes, monthValue);
                 }
                 break;
             case DAYOFWEEK_TRAIN: {
-                    int dayOfWeekValue = int(featureString);
+                    int dayOfWeekValue = stoi(featureString);
                     updateFeatureCounters(categoria->f_dayWeek, dayOfWeekValue);
                 }
                 break;
             case HOUR_TRAIN: {
-                    int hourValue = int(featureString);
+                    int hourValue = stoi(featureString);
                     updateFeatureCounters(categoria->f_hora, hourValue);
                 }
                 break;
             case CUAD_TRAIN: {
-                    int cuadValue = int(featureString);
+                    int cuadValue = stoi(featureString);
                     updateFeatureCounters(categoria->f_cuad, cuadValue);
                 }
                 break;
@@ -276,21 +277,22 @@ int ParserCSV::parseDistrict(string district) {
 int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
     vector<string>::iterator it;
     int featureIndex = 0;
+    int i = 0;
     for ( it = featureVector.begin(); it < featureVector.end(); it++, i++ ) {
         if ( ! it->compare(feature) ) {
             featureIndex = i;
             break;
         }
     }
-    return featureIndex
+    return featureIndex;
 }
 
 void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
     if ( ! this->trainWasPreprocessed ) {
-        feature->cantidad++
+        feature->cantidad++;
         feature->sumatoria += currentValue;
     } else if ( this->trainWasPreprocessed )
-        feature->varianza += ( 1 / feature->cantidad ) * ( currentValue - feature->getMedia() )
+        feature->varianza += ( 1 / (double) feature->cantidad ) * ( currentValue - feature->getMedia() );
 }
 
 TestRow* ParserCSV::parseLineToTestRow(string line) {
@@ -304,19 +306,19 @@ TestRow* ParserCSV::parseLineToTestRow(string line) {
                 districtValue = parseDistrict(featureString);
                 break;
             case YEAR_TEST:
-                yearValue = int(featureString);
+                yearValue = stoi(featureString);
                 break;
             case MONTH_TEST:
-                monthValue = int(featureString);
+                monthValue = stoi(featureString);
                 break;
             case DAYOFWEEK_TEST:
-                dayOfWeekValue = int(featureString);
+                dayOfWeekValue = stoi(featureString);
                 break;
             case HOUR_TEST:
-                hourValue = int(featureString);
+                hourValue = stoi(featureString);
                 break;
             case CUAD_TEST:
-                cuadValue = int(featureString);
+                cuadValue = stoi(featureString);
                 break;
             default:
                 break;

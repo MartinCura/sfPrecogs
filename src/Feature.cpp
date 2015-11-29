@@ -7,10 +7,13 @@
 
 #include "Feature.h"
 
-float Feature::getMedia(){
-    return sumatoria/cantidad;
+double Feature::getMedia(){
+    return this->sumatoria / (double) this->cantidad;
 }
 
+double Feature::getVarianza() {
+    return this->varianza;
+}
 
 Feature::Feature() {
 	// TODO Auto-generated constructor stub

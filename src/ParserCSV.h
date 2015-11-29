@@ -9,6 +9,7 @@
 #include "Enum.h"
 #include "TestRow.h"
 #include "Crimen.h"
+#include "Feature.h"
 #include <sstream>
 #include <fstream>
 #include <string>
