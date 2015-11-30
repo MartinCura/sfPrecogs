@@ -23,10 +23,10 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 	// For para cada CRIMEN:
 	for (int i = 0; i < CANT_CRIMENES; i++){
 		//fprintf(stderr, "estoy aca papa: %d. \n", i);
-		cout << "CRIMEN NRO: " << i << endl;
+		//cout << "CRIMEN NRO: " << i << endl;
 		Crimen* crimen = crimenes->at(i);
 		double proba_crimen = crimen->getProbaCrimen();
-		cout << "Proba: " << crimen->getProbaCrimen() << endl;
+		//cout << "Proba: " << crimen->getProbaCrimen() << endl;
 		vector<double> proba_condicional;
 
 		// For para cada FEATURE:
@@ -50,18 +50,20 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 			posteriori = posteriori * proba_condicional.at(k);
 		}
 
-		cout << "El posteriori del crimen es: " << posteriori << endl;
+		//cout << "El posteriori del crimen es: " << posteriori << endl;
 		probabilidades->push_back(posteriori);
 	}
-	//return this->dividirPorEvidencia(probabilidades); ESTE ES EL QUE VA
+	return this->dividirPorEvidencia(probabilidades);
 	// para bubi:
-	return probabilidades;
+	//return probabilidades;
 }
 
 double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, double var_f, double media_f){
 	const double PI = 3.141592653589793238463;
-	double division = 1 / sqrt(2 * PI * var_f);
+	double division = 1;
+	if (var_f == 0) return division; //No deberia haber varianza = 0, pero hay un caso que pasaba.
 
+	division = 1 / sqrt(2 * PI * var_f);
 	double exponente_paso1 = - (pow(valor_row - media_f, 2));
 	double exponente_paso2 = exponente_paso1 / (2 * var_f);
 	double proba_cond = pow(division, exponente_paso2);
@@ -76,7 +78,7 @@ vector<double>* ClasificadorBayesiano::dividirPorEvidencia(vector<double>* poste
     for ( vector<double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
         double posteriori = *it;
         evidencia += posteriori;
-        cout << "Evidencia parcial: " << evidencia << endl;
+        //cout << "Evidencia parcial: " << evidencia << endl;
     }
 
     for ( vector<double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {

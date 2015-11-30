@@ -32,17 +32,28 @@ void ParserCSV::writeRowSubmission(vector<double>* probsPerCrime) {
     if ( ! this->submissionHasHeader ) {
 
         vector<string> header = categoriasCrimen;
-        header.insert(header.begin(), to_string(this->countSubmissionRows));   // Agrego Id.
-        for ( vector<string>::iterator it = header.begin(); it != header.end(); ++it ) {
-            this->submission << *it << "," << endl;
+        header.insert(header.begin(), "Id");   // Agrego campo Id.
+
+        vector<string>::iterator it = header.begin();
+        while (it != header.end()){
+            this->submission << *it << ",";
+            it++;
         }
+        this->submission << endl;
+
         this->submissionHasHeader = true;
     }
 
-    probsPerCrime->insert(probsPerCrime->begin(), this->countSubmissionRows);   // Agrego Id.
-    for ( vector<double>::iterator it = probsPerCrime->begin(); it != probsPerCrime->end(); ++it ) {
-        this->submission << *it << "," << endl;
+    probsPerCrime->insert(probsPerCrime->begin(), this->countSubmissionRows);   // Agrego nro Id.
+
+    vector<double>::iterator it = probsPerCrime->begin();
+    while (it != probsPerCrime->end()){
+        this->submission << *it << ",";
+        it++;
     }
+    this->submission << endl;
+
+    this->countSubmissionRows++;
 }
 
 bool ParserCSV::closeSubmission() {
