@@ -22,15 +22,15 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 	int CANT_FEATURES = 6;
 	// For para cada CRIMEN:
 	for (int i = 0; i < CANT_CRIMENES; i++){
-		//fprintf(stderr, "estoy aca papa: %d. \n", i);
 		//cout << "CRIMEN NRO: " << i << endl;
 		Crimen* crimen = crimenes->at(i);
 		double proba_crimen = crimen->getProbaCrimen();
 		//cout << "Proba: " << crimen->getProbaCrimen() << endl;
 		vector<double> proba_condicional;
 
+		//proba_condicional.push_back(1);	/// SALTEAR UNA FEATURE
 		// For para cada FEATURE:
-		for (int j = 0; j < CANT_FEATURES; j++){
+		for (int j = 0/*1*/; j < CANT_FEATURES; j++){	/// SALTEADA UNA FEATURE
 			double varianza_feature = crimen->getVarianza(TipoFeature(j));
 			//cout << "VARIANZA: " << varianza_feature << " del Feature: " << j << endl;
 
@@ -49,6 +49,7 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		for (int k = 0; k < CANT_FEATURES; k++){
 			posteriori = posteriori * proba_condicional.at(k);
 		}
+		proba_condicional.clear();
 
 		//cout << "El posteriori del crimen es: " << posteriori << endl;
 		probabilidades->push_back(posteriori);
@@ -68,7 +69,7 @@ double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, double var
 	double exponente_paso2 = exponente_paso1 / (2 * var_f);
 	double proba_cond = pow(division, exponente_paso2);
 
-	if (! isfinite(proba_cond)) return error;
+	if (! isfinite(proba_cond)) return error;	// Comentable si se arregla lo otro
 	return proba_cond;
 }
 
@@ -91,6 +92,9 @@ vector<double>* ClasificadorBayesiano::dividirPorEvidencia(vector<double>* poste
 }
 
 ClasificadorBayesiano::~ClasificadorBayesiano() {
-	// TODO Auto-generated destructor stub
+	probabilidades->clear();
+	delete probabilidades;
+	probabilidadesConEvidencia->clear();
+	delete probabilidadesConEvidencia;
 }
 

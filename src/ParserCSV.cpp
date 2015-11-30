@@ -97,7 +97,7 @@ ParserCSV::~ParserCSV() {
 vector<Crimen*>* ParserCSV::preprocessCrimes() {
     vector<Crimen*>* crimenes = new vector<Crimen*>(CANT_CATEGORIAS, nullptr);  // Inicializo vector de crimenes en null.
 
-    int countRows = 0;
+    int countRows = -1;//0; Para contabilizar la primera fila que no es una observación
     ifstream train ( trainPath );   // Open test.
     if ( train.is_open() ) {
         string linea;

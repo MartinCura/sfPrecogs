@@ -24,7 +24,7 @@ int TestRow::getFeatureRow(TipoFeature tipo){
 	case MES: return r_mes;
 	case HORA: return r_hora;
 	case CUAD: return r_cuad;
-	default: break;
+	default: throw std::exception();
 	}
 }
 

@@ -25,7 +25,7 @@ double Crimen::getMedia(TipoFeature tipo){
 	case MES: return f_mes->getMedia();
 	case HORA: return f_hora->getMedia();
 	case CUAD: return f_cuad->getMedia();
-	default: break;
+	default: throw std::exception();
 	}
 }
 
@@ -37,7 +37,7 @@ double Crimen::getVarianza(TipoFeature tipo){
 	case MES: return f_mes->getVarianza();
 	case HORA: return f_hora->getVarianza();
 	case CUAD: return f_cuad->getVarianza();
-	default: break;
+	default: throw std::exception();
 	}
 }
 

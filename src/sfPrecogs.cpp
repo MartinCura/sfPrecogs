@@ -23,9 +23,9 @@ int main() {
 	cout << "MAAIAAAMEEEEE" << endl;
 
 	string train = "train1611.csv";
-	string test = "test1911.csv";
+	string test = "test1911SinId.csv";
 	string sub = "submission.csv";
-	int CANT_ROW_TEST = 884262;
+	int CANT_ROW_TEST = 20;//884262;
 
 	ParserCSV* parser = new ParserCSV(train, test, sub);
 
@@ -33,28 +33,30 @@ int main() {
 
 	///////////////////////////////////////////////////////////////
 	//PARA PROBAR EL CONTADOR DE CRIMENES:
-	int xx = 0;
-    for ( vector<Crimen*>::iterator it = v_crimenes->begin(); it != v_crimenes->end(); ++it ) {
-        Crimen* crimen = *it;
-    	//fprintf(stderr, "EL CRIMEN %d aparece: %d veces!\n", xx, crimen->apariciones);
-    	xx++;
-    }
+//	int xx = 0;
+//	for ( vector<Crimen*>::iterator it = v_crimenes->begin(); it != v_crimenes->end(); ++it ) {
+//		Crimen* crimen = *it;
+//		fprintf(stderr, "EL CRIMEN %d aparece: %ld veces!\n", xx, crimen->apariciones);
+//		xx++;
+//	}
     /////////////////////////////////////////////////////////////
 
 	ClasificadorBayesiano* clasificador = new ClasificadorBayesiano(v_crimenes);
 
 	for (int i = 0; i < CANT_ROW_TEST; i++){
 		TestRow* row_test = parser->getNextTestRow();
-		vector<double>* probas = clasificador->predictProba(row_test);
-		parser->writeRowSubmission(probas);
+		if (row_test) {
+			vector<double>* probas = clasificador->predictProba(row_test);
+			delete row_test;
+			parser->writeRowSubmission(probas);
+		}
 	}
 	parser->closeSubmission();
 
-    delete parser;
     delete clasificador;
-
     v_crimenes->clear();
     delete v_crimenes;
+    delete parser;
 
 	return 0;
 }
