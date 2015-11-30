@@ -25,7 +25,7 @@ int main() {
 	string train = "train1611.csv";
 	string test = "test1911SinId.csv";
 	string sub = "submission.csv";
-	int CANT_ROW_TEST = 20;//884262;
+	int CANT_ROW_TEST = /*20*/884262;
 
 	ParserCSV* parser = new ParserCSV(train, test, sub);
 

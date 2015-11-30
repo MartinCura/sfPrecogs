@@ -269,6 +269,7 @@ int ParserCSV::parseDistrict(string district) {
 }
 
 int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
+    /** ESTO ES POR MALA MANIPULACION DEL CSV ORIGINAL. NO DEBERIAN TENER COMILLAS, DEBERIAN SER FACTORS **/
     // Remuevo comillas del featureString.
     char charsToRemove[] = "\"";
     for ( unsigned int j = 0; j < strlen(charsToRemove); ++j ) {
@@ -280,7 +281,7 @@ int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
     for (vector<string>::const_iterator it = featureVector.begin() ; it != featureVector.end(); ++it){
         if ( it->compare(feature) == 0 ) {
             featureIndex = i;
-            break;
+            break;R
         }
         i++;
     }
