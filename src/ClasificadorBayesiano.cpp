@@ -13,7 +13,7 @@ using namespace std; //dsp sacar
 ClasificadorBayesiano::ClasificadorBayesiano(vector<Crimen*>* v_crimenes) {
 	crimenes = v_crimenes;
 	probabilidades = new vector<double>();
-
+	probabilidadesConEvidencia = new vector<double>();
 }
 
 vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
@@ -49,9 +49,12 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		for (int k = 0; k < CANT_FEATURES; k++){
 			posteriori = posteriori * proba_condicional.at(k);
 		}
+
 		cout << "El posteriori del crimen es: " << posteriori << endl;
 		probabilidades->push_back(posteriori);
 	}
+	//return this->dividirPorEvidencia(probabilidades); ESTE ES EL QUE VA
+	// para bubi:
 	return probabilidades;
 }
 
@@ -64,6 +67,24 @@ double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, double var
 	double proba_cond = pow(division, exponente_paso2);
 
 	return proba_cond;
+}
+
+vector<double>* ClasificadorBayesiano::dividirPorEvidencia(vector<double>* posterioris){
+	probabilidadesConEvidencia->clear();
+	double evidencia = 0;
+
+    for ( vector<double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
+        double posteriori = *it;
+        evidencia += posteriori;
+        cout << "Evidencia parcial: " << evidencia << endl;
+    }
+
+    for ( vector<double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
+         double probaFinal = (*(it)) / evidencia;
+         //cout << "Proba real del crimen es: " << probaFinal << endl;
+         probabilidadesConEvidencia->push_back(probaFinal);
+    }
+    return probabilidadesConEvidencia;
 }
 
 ClasificadorBayesiano::~ClasificadorBayesiano() {

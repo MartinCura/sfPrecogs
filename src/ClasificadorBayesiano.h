@@ -19,11 +19,14 @@ class ClasificadorBayesiano {
 private:
 	vector<Crimen*>* crimenes;
 	vector<double>* probabilidades;
+	vector<double>* probabilidadesConEvidencia;
 
 public:
 	ClasificadorBayesiano(vector<Crimen*>* v_crimenes);
 
 	double calcularProbaCondicional(int valor_row, double var_crimen, double media_crimen);
+
+	vector<double>* dividirPorEvidencia(vector<double>* probas);
 
 	vector<double>* predictProba(TestRow* row);
 
