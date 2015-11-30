@@ -281,7 +281,7 @@ int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
     for (vector<string>::const_iterator it = featureVector.begin() ; it != featureVector.end(); ++it){
         if ( it->compare(feature) == 0 ) {
             featureIndex = i;
-            break;R
+            break;
         }
         i++;
     }
