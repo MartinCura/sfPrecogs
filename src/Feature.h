@@ -14,10 +14,10 @@ private:
 public:
     int cantidad;
 	int sumatoria;
-    double varianza;
+    long double varianza;
 
-	double getMedia();
-	double getVarianza();
+	long double getMedia();
+	long double getVarianza();
 
 	Feature();
 	virtual ~Feature();

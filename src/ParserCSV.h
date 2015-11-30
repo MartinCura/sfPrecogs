@@ -22,7 +22,7 @@ class ParserCSV {
         ParserCSV(string trainPath, string testPath, string submissionPath);
         vector<Crimen*>* parseTrain();
         TestRow* getNextTestRow();
-        void writeRowSubmission(vector<double>* probsPerCrime);
+        void writeRowSubmission(vector<long double>* probsPerCrime);
         bool closeSubmission();
         virtual ~ParserCSV();
     protected:

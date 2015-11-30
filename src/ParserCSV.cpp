@@ -23,7 +23,7 @@ vector<Crimen*>* ParserCSV::parseTrain() {
     return crimenes;
 }
 
-void ParserCSV::writeRowSubmission(vector<double>* probsPerCrime) {
+void ParserCSV::writeRowSubmission(vector<long double>* probsPerCrime) {
     if ( ! this->submission.is_open() ) {
         this->submission.open( this->submissionPath );   // Open submission.
     }
@@ -44,7 +44,7 @@ void ParserCSV::writeRowSubmission(vector<double>* probsPerCrime) {
     }
 
     probsPerCrime->insert(probsPerCrime->begin(), this->countSubmissionRows);   // Agrego Id.
-    for ( vector<double>::iterator it = probsPerCrime->begin(); it != probsPerCrime->end(); ) {
+    for ( vector<long double>::iterator it = probsPerCrime->begin(); it != probsPerCrime->end(); ) {
         this->submission << *it;
         ++it;
         if (it != probsPerCrime->end())
@@ -114,7 +114,7 @@ vector<Crimen*>* ParserCSV::preprocessCrimes() {
     vector<Crimen*>::iterator it = crimenes->begin();
 	while (it != crimenes->end()){
 		Crimen* crimen = *it;
-		crimen->proba_crimen = crimen->apariciones / (double) countRows;
+		crimen->proba_crimen = crimen->apariciones / (long double) countRows;
 		it++;
 	}
 
@@ -293,8 +293,8 @@ void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
         feature->cantidad++;
         feature->sumatoria += currentValue;
     } else {
-    	double aux = pow( (currentValue - feature->getMedia()), 2);
-        feature->varianza += ( 1 / (double) feature->cantidad ) * ( aux );
+    	long double aux = pow( (currentValue - feature->getMedia()), 2);
+        feature->varianza += ( 1 / (long double) feature->cantidad ) * ( aux );
     }
 }
 

@@ -17,7 +17,7 @@ Crimen::Crimen() {
 	proba_crimen = 0;
 }
 
-double Crimen::getMedia(TipoFeature tipo){
+long double Crimen::getMedia(TipoFeature tipo){
 	switch (tipo){
 	case DISTRICT: return f_district->getMedia();
 	case DAYWEEK: return f_dayWeek->getMedia();
@@ -29,7 +29,7 @@ double Crimen::getMedia(TipoFeature tipo){
 	}
 }
 
-double Crimen::getVarianza(TipoFeature tipo){
+long double Crimen::getVarianza(TipoFeature tipo){
 	switch (tipo){
 	case DISTRICT: return f_district->getVarianza();
 	case DAYWEEK: return f_dayWeek->getVarianza();
@@ -41,7 +41,7 @@ double Crimen::getVarianza(TipoFeature tipo){
 	}
 }
 
-double Crimen::getProbaCrimen(){
+long double Crimen::getProbaCrimen(){
 	return proba_crimen;
 }
 

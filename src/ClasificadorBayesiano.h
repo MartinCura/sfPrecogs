@@ -18,18 +18,18 @@ using namespace std;
 class ClasificadorBayesiano {
 private:
 	vector<Crimen*>* crimenes;
-	vector<double>* probabilidades;
-	vector<double>* probabilidadesConEvidencia;
+	vector<long double>* probabilidades;
+	vector<long double>* probabilidadesConEvidencia;
 
 public:
 	ClasificadorBayesiano(vector<Crimen*>* v_crimenes);
 
-	double calcularProbaCondicional(int valor_row, double var_crimen, double media_crimen);
-	double calcularProbaCondicionalMartin(int valor_row, double var_f, double media_f);
+	long double calcularProbaCondicional(int valor_row, long double var_crimen, long double media_crimen);
+	//long double calcularProbaCondicionalViejo(int valor_row, long double var_f, long double media_f);
 
-	vector<double>* dividirPorEvidencia(vector<double>* probas);
+	vector<long double>* dividirPorEvidencia(vector<long double>* probas);
 
-	vector<double>* predictProba(TestRow* row);
+	vector<long double>* predictProba(TestRow* row);
 
 	virtual ~ClasificadorBayesiano();
 };

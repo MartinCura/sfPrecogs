@@ -7,11 +7,11 @@
 
 #include "Feature.h"
 
-double Feature::getMedia(){
-    return this->sumatoria / (double) this->cantidad;
+long double Feature::getMedia(){
+    return this->sumatoria / (long double) this->cantidad;
 }
 
-double Feature::getVarianza() {
+long double Feature::getVarianza() {
     return this->varianza;
 }
 

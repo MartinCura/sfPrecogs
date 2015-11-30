@@ -22,11 +22,11 @@ public:
 	Feature* f_hora;
 	Feature* f_cuad;
 	long apariciones = 1;   // Cantidad de veces presente en el train dataset.
-    double proba_crimen;
+    long double proba_crimen;
 
-	double getMedia(TipoFeature tipo);
-	double getVarianza(TipoFeature tipo);
-	double getProbaCrimen();
+	long double getMedia(TipoFeature tipo);
+	long double getVarianza(TipoFeature tipo);
+	long double getProbaCrimen();
 
 	Crimen();
 	virtual ~Crimen();

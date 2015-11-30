@@ -25,7 +25,7 @@ int main() {
 	string train = "train1611.csv";
 	string test = "test1911SinId.csv";
 	string sub = "submission.csv";
-	int CANT_ROW_TEST = 1;//884262;
+	int CANT_ROW_TEST = 20;//884262;
 
 	ParserCSV* parser = new ParserCSV(train, test, sub);
 
@@ -46,7 +46,7 @@ int main() {
 	for (int i = 0; i < CANT_ROW_TEST; i++){
 		TestRow* row_test = parser->getNextTestRow();
 		if (row_test) {
-			vector<double>* probas = clasificador->predictProba(row_test);
+			vector<long double>* probas = clasificador->predictProba(row_test);
 			delete row_test;
 			parser->writeRowSubmission(probas);
 		}
