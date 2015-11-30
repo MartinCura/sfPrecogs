@@ -28,9 +28,9 @@ vector<long double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		cout << "Proba: " << crimen->getProbaCrimen() << endl;//
 		vector<long double> proba_condicional;
 
-		proba_condicional.push_back(1);	/// PARA SALTEAR UNA FEATURE, descomentar y cambiar el valor inicial de j por 1
+		//proba_condicional.push_back(1);	/// PARA SALTEAR UNA FEATURE, descomentar y cambiar el valor inicial de j por 1
 		// For para cada FEATURE:
-		for (int j = /*0*/1; j < CANT_FEATURES; j++){
+		for (int j = 0/*1*/; j < CANT_FEATURES; j++){
 			long double varianza_feature = crimen->getVarianza(TipoFeature(j));
 			//cout << "VARIANZA: " << varianza_feature << " del Feature: " << j << endl;
 
@@ -61,7 +61,7 @@ vector<long double>* ClasificadorBayesiano::predictProba(TestRow* row){
 }
 
 /*
-long double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, long double var_f, long double media_f){
+long double ClasificadorBayesiano::calcularProbaCondicionalViejo(int valor_row, long double var_f, long double media_f){
 	const long double PI = 3.141592653589793238463;
 	long double error = 1;
 	if (var_f == 0) return error; //No deberia haber varianza = 0, pero hay un caso que pasaba.
