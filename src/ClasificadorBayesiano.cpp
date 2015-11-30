@@ -92,6 +92,7 @@ long double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, long 
 
 vector<long double>* ClasificadorBayesiano::dividirPorEvidencia(vector<long double>* posterioris){
 	probabilidadesConEvidencia->clear();
+	long double error = 1;
 	long double evidencia = 0;
 
     for ( vector<long double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
@@ -103,6 +104,7 @@ vector<long double>* ClasificadorBayesiano::dividirPorEvidencia(vector<long doub
     for ( vector<long double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
          long double probaFinal = (*(it)) / evidencia;
          //cout << "*****Proba real del crimen es: " << probaFinal << endl;//
+         if (! isfinite(probaFinal)) probaFinal = error;
          probabilidadesConEvidencia->push_back(probaFinal);
          sumatoriaAux += probaFinal;//
     }
