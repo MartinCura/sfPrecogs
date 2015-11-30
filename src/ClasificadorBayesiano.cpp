@@ -86,6 +86,7 @@ long double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, long 
 	long double exponente_paso2 = exponente_paso1 / (2 * var_f);
 	long double proba_cond = division * exp( exponente_paso2 );
 
+    if (! isfinite(proba_cond)) return error;
 	return proba_cond;
 }
 
