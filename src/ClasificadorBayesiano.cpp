@@ -60,14 +60,15 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 
 double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, double var_f, double media_f){
 	const double PI = 3.141592653589793238463;
-	double division = 1;
-	if (var_f == 0) return division; //No deberia haber varianza = 0, pero hay un caso que pasaba.
+	double error = 1;
+	if (var_f == 0) return error; //No deberia haber varianza = 0, pero hay un caso que pasaba.
 
-	division = 1 / sqrt(2 * PI * var_f);
+	double division = 1 / sqrt(2 * PI * var_f);
 	double exponente_paso1 = - (pow(valor_row - media_f, 2));
 	double exponente_paso2 = exponente_paso1 / (2 * var_f);
 	double proba_cond = pow(division, exponente_paso2);
 
+	if (! isfinite(proba_cond)) return error;
 	return proba_cond;
 }
 
