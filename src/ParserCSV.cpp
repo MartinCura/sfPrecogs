@@ -128,6 +128,56 @@ void ParserCSV::completeCrimesAttributes(vector<Crimen*>* crimenes) {
     train.close();
 
     this->trainWasPreprocessed = false;
+
+    /** Verifico contadores y atributos. DEBUGGING! **/
+    int i = 0;
+    vector<Crimen*>::iterator it = crimenes->begin();
+	while (it != crimenes->end()){
+		Crimen* crimen = *it;
+		it++;
+
+        printf("CRIMEN %d: \n", i);
+		cout << crimen->apariciones << endl;
+		cout << crimen->getProbaCrimen() << endl;
+
+        printf("ANIO:\n");
+        cout << "cantidad" << crimen->f_anio->cantidad << endl;
+        cout << "sumatoria" << crimen->f_anio->sumatoria << endl;
+        cout << "varianza" << crimen->f_anio->varianza << endl;
+        cout << "media" << crimen->f_anio->getMedia() << endl;
+
+        printf("CUAD:\n");
+        cout << "cantidad" << crimen->f_cuad->cantidad << endl;
+        cout << "sumatoria" << crimen->f_cuad->sumatoria << endl;
+        cout << "varianza" << crimen->f_cuad->varianza << endl;
+        cout << "media" << crimen->f_cuad->getMedia() << endl;
+
+        printf("DAY OF WEEK:\n");
+        cout << "cantidad" << crimen->f_dayWeek->cantidad << endl;
+        cout << "sumatoria" << crimen->f_dayWeek->sumatoria << endl;
+        cout << "varianza" << crimen->f_dayWeek->varianza << endl;
+        cout << "media" << crimen->f_dayWeek->getMedia() << endl;
+
+        printf("DISTRICT:\n");
+        cout << "cantidad" << crimen->f_district->cantidad << endl;
+        cout << "sumatoria" << crimen->f_district->sumatoria << endl;
+        cout << "varianza" << crimen->f_district->varianza << endl;
+        cout << "media" << crimen->f_district->getMedia() << endl;
+
+        printf("HORA:\n");
+        cout << "cantidad" << crimen->f_hora->cantidad << endl;
+        cout << "sumatoria" << crimen->f_hora->sumatoria << endl;
+        cout << "varianza" << crimen->f_hora->varianza << endl;
+        cout << "media" << crimen->f_hora->getMedia() << endl;
+
+        printf("MES:\n");
+        cout << "cantidad" << crimen->f_mes->cantidad << endl;
+        cout << "sumatoria" << crimen->f_mes->sumatoria << endl;
+        cout << "varianza" << crimen->f_mes->varianza << endl;
+        cout << "media" << crimen->f_mes->getMedia() << endl;
+
+        i++;
+	}
 }
 
 /** Pasa una linea a crimen con sus features y contadores respectivos. **/
@@ -159,31 +209,37 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
                 break;
             case DISTRICT_TRAIN: {
                     int districtValue = parseDistrict(featureString);
+                    categoria->f_district->cantidad = categoria->apariciones;
                     updateFeatureCounters(categoria->f_district, districtValue);
                 }
                 break;
             case YEAR_TRAIN: {
                     int yearValue = atoi(featureString.data());
+                    categoria->f_anio->cantidad = categoria->apariciones;
                     updateFeatureCounters(categoria->f_anio, yearValue);
                 }
                 break;
             case MONTH_TRAIN: {
                     int monthValue = atoi(featureString.data());
+                    categoria->f_mes->cantidad = categoria->apariciones;
                     updateFeatureCounters(categoria->f_mes, monthValue);
                 }
                 break;
             case DAYOFWEEK_TRAIN: {
                     int dayOfWeekValue = atoi(featureString.data());
+                    categoria->f_dayWeek->cantidad = categoria->apariciones;
                     updateFeatureCounters(categoria->f_dayWeek, dayOfWeekValue);
                 }
                 break;
             case HOUR_TRAIN: {
                     int hourValue = atoi(featureString.data());
+                    categoria->f_hora->cantidad = categoria->apariciones;
                     updateFeatureCounters(categoria->f_hora, hourValue);
                 }
                 break;
             case CUAD_TRAIN: {
                     int cuadValue = atoi(featureString.data());
+                    categoria->f_cuad->cantidad = categoria->apariciones;
                     updateFeatureCounters(categoria->f_cuad, cuadValue);
                 }
                 break;
@@ -216,7 +272,6 @@ int ParserCSV::parseFeature(string feature, vector<string> featureVector) {
         }
         i++;
     }
-
     return featureIndex;
 }
 

@@ -36,7 +36,7 @@ int main() {
 	int xx = 0;
     for ( vector<Crimen*>::iterator it = v_crimenes->begin(); it != v_crimenes->end(); ++it ) {
         Crimen* crimen = *it;
-    	fprintf(stderr, "EL CRIMEN %d aparece: %d veces!\n", xx, crimen->apariciones);
+    	//fprintf(stderr, "EL CRIMEN %d aparece: %d veces!\n", xx, crimen->apariciones);
     	xx++;
     }
     /////////////////////////////////////////////////////////////

@@ -19,10 +19,10 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 	int CANT_FEATURES = 6;
 	// For para cada CRIMEN:
 	for (int i = 0; i < CANT_CRIMENES; i++){
-		fprintf(stderr, "estoy aca papa: %d. \n", i);
+		//fprintf(stderr, "estoy aca papa: %d. \n", i);
 		Crimen* crimen = crimenes->at(i);
 		double proba_crimen = crimen->getProbaCrimen();
-		fprintf(stderr, "Proba_crimen es: %d !!\n", proba_crimen);
+		//fprintf(stderr, "Proba_crimen es: %d !!\n", proba_crimen);
 		vector<double> proba_condicional;
 
 		// For para cada FEATURE:
@@ -39,7 +39,7 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		for (int k = 0; k < CANT_FEATURES; k++){
 			posteriori = posteriori * proba_condicional[k];
 		}
-		fprintf(stderr, "El posteriori es: %d !!\n", posteriori);
+		//fprintf(stderr, "El posteriori es: %d !!\n", posteriori);
 		probabilidades->push_back(posteriori);
 	}
 	return probabilidades;
