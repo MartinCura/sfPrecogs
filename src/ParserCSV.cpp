@@ -281,7 +281,8 @@ void ParserCSV::updateFeatureCounters(Feature* feature, int currentValue) {
         feature->cantidad++;
         feature->sumatoria += currentValue;
     } else {
-        feature->varianza += ( 1 / (double) feature->cantidad ) * ( currentValue - feature->getMedia() );
+    	double aux = pow( (currentValue - feature->getMedia()), 2);
+        feature->varianza += ( 1 / (double) feature->cantidad ) * ( aux );
     }
 }
 

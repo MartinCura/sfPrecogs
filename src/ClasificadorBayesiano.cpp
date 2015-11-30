@@ -6,6 +6,9 @@
  */
 
 #include "ClasificadorBayesiano.h"
+#include <stdio.h> //dsp sacar
+#include <iostream>  //dsp sacar
+using namespace std; //dsp sacar
 
 ClasificadorBayesiano::ClasificadorBayesiano(vector<Crimen*>* v_crimenes) {
 	crimenes = v_crimenes;
@@ -22,7 +25,7 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		//fprintf(stderr, "estoy aca papa: %d. \n", i);
 		Crimen* crimen = crimenes->at(i);
 		double proba_crimen = crimen->getProbaCrimen();
-		//fprintf(stderr, "Proba_crimen es: %d !!\n", proba_crimen);
+		cout << "Proba crimen: " << crimen->getProbaCrimen() << endl;
 		vector<double> proba_condicional;
 
 		// For para cada FEATURE:
@@ -39,7 +42,7 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		for (int k = 0; k < CANT_FEATURES; k++){
 			posteriori = posteriori * proba_condicional[k];
 		}
-		//fprintf(stderr, "El posteriori es: %d !!\n", posteriori);
+		cout << "El posteriori del crimen es: " << posteriori << endl;
 		probabilidades->push_back(posteriori);
 	}
 	return probabilidades;
