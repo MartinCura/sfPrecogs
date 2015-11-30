@@ -129,7 +129,9 @@ void ParserCSV::completeCrimesAttributes(vector<Crimen*>* crimenes) {
 
     this->trainWasPreprocessed = false;
 
+
     /** Verifico contadores y atributos. DEBUGGING! **/
+    /*
     int i = 0;
     vector<Crimen*>::iterator it = crimenes->begin();
 	while (it != crimenes->end()){
@@ -178,6 +180,7 @@ void ParserCSV::completeCrimesAttributes(vector<Crimen*>* crimenes) {
 
         i++;
 	}
+	*/
 }
 
 /** Pasa una linea a crimen con sus features y contadores respectivos. **/
