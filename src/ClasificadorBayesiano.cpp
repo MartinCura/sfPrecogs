@@ -32,13 +32,13 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		// For para cada FEATURE:
 		for (int j = 0; j < CANT_FEATURES; j++){
 			double varianza_feature = crimen->getVarianza(TipoFeature(j));
-			cout << "VARIANZA: " << varianza_feature << " del Feature: " << j << endl;
+			//cout << "VARIANZA: " << varianza_feature << " del Feature: " << j << endl;
 
 			double media_feature = crimen->getMedia(TipoFeature(j));
-			cout << "MEDIA: " << media_feature << " del Feature: " << j << endl;
+			//cout << "MEDIA: " << media_feature << " del Feature: " << j << endl;
 
 			int valor_row = row->getFeatureRow(TipoFeature(j));
-			cout << "VALOR_ROW: " << valor_row << " del Feature: " << j << endl;
+			//cout << "VALOR_ROW: " << valor_row << " del Feature: " << j << endl;
 
 			double proba = this->calcularProbaCondicional(valor_row, varianza_feature, media_feature);
 			proba_condicional.push_back(proba);
