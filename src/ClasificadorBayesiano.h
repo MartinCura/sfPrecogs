@@ -25,6 +25,7 @@ public:
 	ClasificadorBayesiano(vector<Crimen*>* v_crimenes);
 
 	double calcularProbaCondicional(int valor_row, double var_crimen, double media_crimen);
+	double calcularProbaCondicionalMartin(int valor_row, double var_f, double media_f);
 
 	vector<double>* dividirPorEvidencia(vector<double>* probas);
 

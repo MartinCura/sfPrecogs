@@ -201,8 +201,8 @@ void ParserCSV::tokenizeLineToCrime(string line, vector<Crimen*>* crimenes) {
     while(getline(streamLine, featureString, ',')) {
         // Remuevo comillas del featureString.
         char charsToRemove[] = "\"";
-        for ( unsigned int i = 0; i < strlen(charsToRemove); ++i ) {
-            featureString.erase( remove(featureString.begin(), featureString.end(), charsToRemove[i]), featureString.end() );
+        for ( unsigned int j = 0; j < strlen(charsToRemove); ++j ) {
+            featureString.erase( remove(featureString.begin(), featureString.end(), charsToRemove[j]), featureString.end() );
         }
 
         switch (i) {

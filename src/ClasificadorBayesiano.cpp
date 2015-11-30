@@ -22,15 +22,15 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 	int CANT_FEATURES = 6;
 	// For para cada CRIMEN:
 	for (int i = 0; i < CANT_CRIMENES; i++){
-		//cout << "CRIMEN NRO: " << i << endl;
+		cout << "CRIMEN NRO: " << i << endl;//
 		Crimen* crimen = crimenes->at(i);
 		double proba_crimen = crimen->getProbaCrimen();
-		//cout << "Proba: " << crimen->getProbaCrimen() << endl;
+		cout << "Proba: " << crimen->getProbaCrimen() << endl;//
 		vector<double> proba_condicional;
 
-		//proba_condicional.push_back(1);	/// SALTEAR UNA FEATURE
+		//proba_condicional.push_back(1);	/// PARA SALTEAR UNA FEATURE, descomentar y cambiar el valor inicial de j por 1
 		// For para cada FEATURE:
-		for (int j = 0/*1*/; j < CANT_FEATURES; j++){	/// SALTEADA UNA FEATURE
+		for (int j = 0/*1*/; j < CANT_FEATURES; j++){
 			double varianza_feature = crimen->getVarianza(TipoFeature(j));
 			//cout << "VARIANZA: " << varianza_feature << " del Feature: " << j << endl;
 
@@ -40,7 +40,8 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 			int valor_row = row->getFeatureRow(TipoFeature(j));
 			//cout << "VALOR_ROW: " << valor_row << " del Feature: " << j << endl;
 
-			double proba = this->calcularProbaCondicional(valor_row, varianza_feature, media_feature);
+			double proba = this->calcularProbaCondicional(valor_row, varianza_feature, media_feature);			//<<<<<<<<<<<<<<<<<<<<<<
+			//double proba = this->calcularProbaCondicionalMartin(valor_row, varianza_feature, media_feature);	//<<<<<<<<<<<<<<<<<<<<<<
 			proba_condicional.push_back(proba);
 		}
 
@@ -51,7 +52,7 @@ vector<double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		}
 		proba_condicional.clear();
 
-		//cout << "El posteriori del crimen es: " << posteriori << endl;
+		cout << "El posteriori del crimen es: " << posteriori << endl;//
 		probabilidades->push_back(posteriori);
 	}
 	return this->dividirPorEvidencia(probabilidades);
@@ -73,6 +74,19 @@ double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, double var
 	return proba_cond;
 }
 
+double ClasificadorBayesiano::calcularProbaCondicionalMartin(int valor_row, double var_f, double media_f){
+	const double PI = 3.141592653589793238463;
+	double error = 1;
+	if (var_f == 0) return error; //No deberia haber varianza = 0, pero hay un caso que pasaba.
+
+	double division = 1 / sqrt(2 * PI * var_f);
+	double exponente_paso1 = - (pow(valor_row - media_f, 2));
+	double exponente_paso2 = exponente_paso1 / (2 * var_f);
+	double proba_cond = division * exp( exponente_paso2 );
+
+	return proba_cond;
+}
+
 vector<double>* ClasificadorBayesiano::dividirPorEvidencia(vector<double>* posterioris){
 	probabilidadesConEvidencia->clear();
 	double evidencia = 0;
@@ -80,14 +94,16 @@ vector<double>* ClasificadorBayesiano::dividirPorEvidencia(vector<double>* poste
     for ( vector<double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
         double posteriori = *it;
         evidencia += posteriori;
-        //cout << "Evidencia parcial: " << evidencia << endl;
+        //cout << "Evidencia parcial: " << evidencia << endl;//
     }
-
+    double sumatoriaAux = 0;//
     for ( vector<double>::iterator it = posterioris->begin(); it != posterioris->end(); ++it ) {
          double probaFinal = (*(it)) / evidencia;
-         //cout << "Proba real del crimen es: " << probaFinal << endl;
+         cout << "*****Proba real del crimen es: " << probaFinal << endl;//
          probabilidadesConEvidencia->push_back(probaFinal);
+         sumatoriaAux += probaFinal;//
     }
+    cout << "~~~Sumatoria de probas finales: "<<sumatoriaAux<<std::endl;//
     return probabilidadesConEvidencia;
 }
 
