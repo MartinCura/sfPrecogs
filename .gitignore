@@ -3,3 +3,6 @@
 .cproject
 .settings/language.settings.xml
 .settings/org.eclipse.cdt.core.prefs
+train*
+test*
+submission*

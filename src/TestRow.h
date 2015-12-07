@@ -18,9 +18,10 @@ private:
 	int r_mes;
 	int r_hora;
 	int r_cuad;
+	int r_cuad2;
 
 public:
-	TestRow(int districtValue, int yearValue, int monthValue, int dayOfWeekValue, int hourValue, int cuadValue);
+	TestRow(int districtValue, int yearValue, int monthValue, int dayOfWeekValue, int hourValue, int cuadValue, int cuad2Value);
 
 	int getFeatureRow(TipoFeature tipo);
 

@@ -19,7 +19,7 @@ ClasificadorBayesiano::ClasificadorBayesiano(vector<Crimen*>* v_crimenes) {
 vector<long double>* ClasificadorBayesiano::predictProba(TestRow* row){
 	probabilidades->clear();
 	int CANT_CRIMENES = 39;
-	int CANT_FEATURES = 6;
+	int CANT_FEATURES = 7;//6;
 	// For para cada CRIMEN:
 	for (int i = 0; i < CANT_CRIMENES; i++){
 		//cout << "CRIMEN NRO: " << i << endl;//
@@ -56,25 +56,7 @@ vector<long double>* ClasificadorBayesiano::predictProba(TestRow* row){
 		probabilidades->push_back(posteriori);
 	}
 	return this->dividirPorEvidencia(probabilidades);
-	// para bubi:
-	//return probabilidades;
 }
-
-/*
-long double ClasificadorBayesiano::calcularProbaCondicionalViejo(int valor_row, long double var_f, long double media_f){
-	const long double PI = 3.141592653589793238463;
-	long double error = 1;
-	if (var_f == 0) return error; //No deberia haber varianza = 0, pero hay un caso que pasaba.
-
-	long double division = 1 / sqrt(2 * PI * var_f);
-	long double exponente_paso1 = - (pow(valor_row - media_f, 2));
-	long double exponente_paso2 = exponente_paso1 / (2 * var_f);
-	long double proba_cond = pow(division, exponente_paso2);
-
-	if (! isfinite(proba_cond)) return error;	// Comentable si se arregla lo otro
-	return proba_cond;
-}
-*/
 
 long double ClasificadorBayesiano::calcularProbaCondicional(int valor_row, long double var_f, long double media_f){
 	const long double PI = 3.141592653589793238463;

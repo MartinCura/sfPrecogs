@@ -14,6 +14,7 @@ Crimen::Crimen() {
 	f_mes = new Feature();
 	f_hora = new Feature();
 	f_cuad = new Feature();
+	f_cuad2 = new Feature();
 	proba_crimen = 0;
 }
 
@@ -25,6 +26,7 @@ long double Crimen::getMedia(TipoFeature tipo){
 	case MES: return f_mes->getMedia();
 	case HORA: return f_hora->getMedia();
 	case CUAD: return f_cuad->getMedia();
+	case CUAD2: return f_cuad2->getMedia();
 	default: throw std::exception();
 	}
 }
@@ -37,6 +39,7 @@ long double Crimen::getVarianza(TipoFeature tipo){
 	case MES: return f_mes->getVarianza();
 	case HORA: return f_hora->getVarianza();
 	case CUAD: return f_cuad->getVarianza();
+	case CUAD2: return f_cuad2->getVarianza();
 	default: throw std::exception();
 	}
 }
@@ -52,5 +55,6 @@ Crimen::~Crimen() {
 	delete f_mes;
 	delete f_hora;
 	delete f_cuad;
+	delete f_cuad2;
 }
 

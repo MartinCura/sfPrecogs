@@ -22,9 +22,9 @@ using namespace std;
 int main() {
 	cout << "MAAIAAAMEEEEE" << endl;
 
-	string train = "train1611.csv";
-	string test = "test1911SinId.csv";
-	string sub = "submission.csv";
+	string train = "trainM.csv";
+	string test = "testM.csv";
+	string sub = "submission.csv"; // función para transformar el día
 	int CANT_ROW_TEST = /*20*/884262;
 
 	ParserCSV* parser = new ParserCSV(train, test, sub);
@@ -58,5 +58,6 @@ int main() {
     delete v_crimenes;
     delete parser;
 
+    cout << "Basta chicos." << endl;
 	return 0;
 }

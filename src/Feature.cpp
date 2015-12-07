@@ -19,7 +19,6 @@ Feature::Feature() {
 	this->cantidad = 0;
 	this->sumatoria = 0;
 	this->varianza = 0;
-	// TODO Auto-generated constructor stub
 }
 
 Feature::~Feature() {

@@ -21,6 +21,7 @@ public:
 	Feature* f_mes;
 	Feature* f_hora;
 	Feature* f_cuad;
+	Feature* f_cuad2;
 	long apariciones = 1;   // Cantidad de veces presente en el train dataset.
     long double proba_crimen;
 
